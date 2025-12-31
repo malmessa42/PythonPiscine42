@@ -1,0 +1,89 @@
+# print(filter.__doc__)
+
+# filter(function or None, iterable) --> filter object
+# Return an iterator yielding those items of iterable for which function(item)
+# is true. If function is None, return the items that are true.
+
+# filter(function, iterable)
+# It goes through each item in iterable
+# Applies function(item)
+# If the function returns True, it includes the item in the result
+# If the function is None, it acts like bool(item), i.e., keeps all truthy values
+
+# If you want to return something similar to what filter() returns, you're essentially looking to return a generator or an iterator — that is, something you can loop through but that doesn’t store all the results at once.
+# Why use yield (vs return) for custom filter:
+# yield creates a generator, which returns items one at a time, just like filter().
+# It’s memory-efficient (doesn't store all results at once).
+# Keeps the code clean and simple for on-demand processing.
+
+# yield is like a pause-and-return inside a function.
+# When the function reaches yield, it sends out a value and pauses, saving its place. When you ask for the next value, it resumes right where it left off.
+# It lets the function produce a series of values one at a time, instead of all at once.
+
+'''
+def ft_filter(func, iter):
+    lst = []
+    if (func == None):
+        for i in iter:
+            if (i): yield i
+    else:
+        for i in iter:
+            if func(i): yield i
+'''
+
+def ft_filter(func, iter):   
+    return (i for i in iter if i) if func is None else (i for i in iter if func(i))
+
+'''
+lstx = [1, 2, 0, -2, -5, 0, None]
+tmp = ft_filter(None, lstx)
+tmp2 = filter(None, lstx)
+print (list(tmp))
+print (list(tmp2))
+
+nums = [1, 2, 3, 4, 5]
+# Keep even numbers only
+f = filter(lambda x: x % 2 == 0, nums)
+print(f)            # <filter object at 0x...>
+print(list(f))      # [2, 4]
+f2 = ft_filter(lambda x: x % 2 == 0, nums)
+print(f2)            # <filter object at 0x...>
+print(list(f2))      # [2, 4]
+
+text = "Hello, World!"
+vowels = set("aeiouAEIOU")
+result = filter(lambda c: c in vowels, text)
+print(''.join(result))  # eoO
+result2 = ft_filter(lambda c: c in vowels, text)
+print(''.join(result2))  # eoO
+
+nums = [-5, 3, 0, 2, -1, 9]
+positive = filter(lambda x: x > 0, nums)
+print(list(positive))  # [3, 2, 9]
+positive2 = ft_filter(lambda x: x > 0, nums)
+print(list(positive2))  # [3, 2, 9]
+
+words = ["apple", "dog", "banana", "cat", "kiwi"]
+long_words = filter(lambda w: len(w) > 4, words)
+print(list(long_words))  # ['apple', 'banana']
+long_words2 = ft_filter(lambda w: len(w) > 4, words)
+print(list(long_words2))  # ['apple', 'banana']
+
+strings = ["hello", "", "world", "", "python"]
+non_empty = filter(None, strings)
+print(list(non_empty))  # ['hello', 'world', 'python']
+non_empty2 = ft_filter(None, strings)
+print(list(non_empty2))  # ['hello', 'world', 'python']
+
+mixed = "abc123def456"
+digits = filter(str.isdigit, mixed)
+print(''.join(digits))  # 123456
+digits2 = ft_filter(str.isdigit, mixed)
+print(''.join(digits2))  # 123456
+
+s = "PyThOn"
+uppercase = filter(str.isupper, s)
+print(''.join(uppercase))  # PTO
+uppercase2 = ft_filter(str.isupper, s)
+print(''.join(uppercase2))  # PTO
+'''
